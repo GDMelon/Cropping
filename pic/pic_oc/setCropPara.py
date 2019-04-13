@@ -9,4 +9,3 @@ def paraSet():
     if inputY == "":
         inputY = 0.0
     return scale,(inputX,inputY)
-

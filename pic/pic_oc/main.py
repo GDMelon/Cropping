@@ -1,6 +1,14 @@
 import os
 from PIL import Image
-import  workdir,itemSelect,cropBox,pictureCrop,ADmode,cropExe
+
+# 工作路径
+import workdir
+# 筛选调整对象
+import itemSelect
+# 调试模式
+import adjustMode
+# 批量处理
+import processMode
 
 cropBoxSet = ""
 
@@ -29,38 +37,18 @@ worktype = input()
 
 if worktype == "AD":
     file = os.path.join(workDirectory,itemlst[-1])
-    img = Image.open(file)
-    imgWeight, imgHeight = img.size
-    print("选择剪裁方式")
-    print("中心剪裁 -- C")
-    print("边缘剪裁 -- S")
-    cropType = input()
-    if cropType == "C":
-        print("待处理图片尺寸为："+ str(img.size))
-        # scale = input("剪裁范围(0.0~1.0): ")
-        # scale = float(scale)
-        # print("输入偏移值：")
-        # inputX = input("X轴方向偏移：")
-        # if inputX == "":
-        #     inputX = 0.0
-        # inputY = input("Y轴方向偏移：")
-        # if inputY == "":
-        #     inputY = 0.0
-        cropPara = cropExe.cropexe(file,img)
-        takeThePara = input("是否使用当前参数：")
-        if takeThePara == "是":
-            cropBoxSet = cropPara
-        else:
-            print("当前设置的参数为：")
-            print(cropPara)
-            cropPara = cropExe.cropexe(file,img)
+    # 重写调试模式
+    cropType,boxPara = adjustMode.cropAdjust(file)
+    print("当前剪裁模式为："+ cropType)
+    print("\n")
+    print("是否进行批量处理？：")
+    judePara = input()
+    if judePara == "是":
+        processMode.cropProcess(workDirectory,itemlst,boxPara)
 
-    elif cropType == "S":
-        pass
+    else:
+        print("滚！")
 
-
-
-        # boxset = cropBox.midCrop()
 elif worktype== "WR":
     for i in itemlst:
         file = os.path.join(workDirectory,i)
